@@ -66,7 +66,7 @@ def load_datasets_with_fallback():
                         fout.addfile(tf,buffer)
                 with tarfile.open(parquet_path, "r:*") as tar:
                     df = pd.concat([pd.read_parquet(tar.extractfile(file)) for file in tar.getnames()])
-                    df.reset_index().to_feather('diseases.feather',compression = 'lz4')
+                    df.reset_index().to_feather(feather_path,compression = 'lz4')
                     yield pd.read_feather(feather_path)
     except error_perm as resp:
         if str(resp) == "550 No files found":
