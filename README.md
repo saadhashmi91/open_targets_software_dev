@@ -11,4 +11,7 @@
 ```
 python 'Open Targets.py'
 ```
+## Output and answers
+- The result for part-one of the test is saved as _**output.json**_.
+- The number of target-target pairs which share a connection to at least two diseases was found to be: _**87286**_
 
