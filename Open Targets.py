@@ -45,7 +45,7 @@ def load_datasets_with_fallback():
             if os.path.isfile(feather_path):
                 yield pd.read_feather(feather_path)
             elif os.path.isfile(parquet_path):
-                with tarfile.open(name, "r:*") as tar:
+                with tarfile.open(parquet_path, "r:*") as tar:
                     df = pd.concat([pd.read_parquet(tar.extractfile(file)) for file in tar.getnames()])
                     df.reset_index().to_feather(feather_path,compression = 'lz4')
                     yield pd.read_feather(feather_path)
@@ -54,7 +54,7 @@ def load_datasets_with_fallback():
                 ftp.login()
                 ftp.cwd(path)
                 files = [filename for filename in ftp.nlst() if fnmatch.fnmatch(filename, '*.parquet')]
-                with tarfile.open(name, "w:gz") as fout:
+                with tarfile.open(parquet_path, "w:gz") as fout:
                     for file_ in files:
                         buffer = io.BytesIO()
                         ftp.retrbinary('RETR ' + str(file_), buffer.write)
@@ -64,7 +64,7 @@ def load_datasets_with_fallback():
                         tf.size = size
                         buffer.seek(0)
                         fout.addfile(tf,buffer)
-                with tarfile.open(name, "r:*") as tar:
+                with tarfile.open(parquet_path, "r:*") as tar:
                     df = pd.concat([pd.read_parquet(tar.extractfile(file)) for file in tar.getnames()])
                     df.reset_index().to_feather('diseases.feather',compression = 'lz4')
                     yield pd.read_feather(feather_path)
